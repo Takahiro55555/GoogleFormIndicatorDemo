@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="ja" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>[デモ]GoogleAppsScript</title>
+
+    <!-- Bootstrap CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  </head>
+  <body class="container">
+    <header class="row py-4">
+      <h1>[デモ]Googleフォームを反映する</h1>
+    </header>
+    <section class="row py-4">
+      <h2 class="pb-2">申し込み状況</h2>
+      <table class="table table-secondary">
+        <thead>
+          <tr>
+            <td>申込者数</td>
+            <td>タケノコ派の数</td>
+            <td>キノコ派の数</td>
+            <td>こだわりはない人の数</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td id="respondents"></td>
+            <td id=takenoko></td>
+            <td id="kinoko"></td>
+            <td id="spectator"></td>
+          </tr>
+        </tbody>
+
+      </table>
+    </section>
+    <section class="row py-4">
+      <h2>説明</h2>
+      <div class="col-12">
+        <p>
+          GoogleフォームをGoogleAppsScriptとJavaScriptのXMLHttpRequestを使用して静的ページに反映するデモです。
+          以下のGoogleフォームに回答すると、アンケート結果が更新されているのが確認できると思います。
+        </p>
+        <p>
+          申込者数がスプレッドシートで指定した定員を超えると、セルの背景が変化します。
+        </p>
+      </div>
+      <section class="col-12 py-3">
+        <h3>フォームについての補足</h3>
+        <p>
+          このデモは、タケノコ派の人々とキノコ派の人々が対決するイベントを想定しています。
+          参加希望者は参戦する陣営を選択し、イベントを見学したい人は『とくにこだわりはない』を選択します。
+        </p>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSegjeIsOilNrUWwGyh9u6dcxxTo70cPrZGjEvafeV2GUAjrng/viewform?usp=sf_link" target="_blank">
+          デモ用Googleフォーム
+        </a>
+      </section>
+      <section class="col-12 py-3">
+        <h3>備考</h3>
+        <div class="col-12">
+          <p>
+            CSSはBootstrap4のCDNを使用しています。
+          </p>
+          <p>
+            なお、本ページはPCでの閲覧を想定して作成されています。
+          </p>
+        </div>
+      </section>
+    </section>
+  </body>
+  <script type="text/javascript">
+    // json文字列で受け取る場合（各陣営の申込者数と定員数）
+    var xmlHttpRequestJson = new XMLHttpRequest();
+    xmlHttpRequestJson.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            if (this.response) {
+                let takenoko    = document.getElementById("takenoko");
+                let kinoko      = document.getElementById("kinoko");
+                let spectator   = document.getElementById("spectator");
+
+                // 読み込んだ人数と定員を表示する
+                takenoko.innerHTML    = this.response.takenoko + "/" + this.response.takenoko_prescribed;
+                kinoko.innerHTML      = this.response.kinoko + "/" + this.response.kinoko_prescribed;
+                spectator.innerHTML   = this.response.spectator + "/" + this.response.spectator_prescribed;
+
+                // 定員を超えている場合は、背景を赤にする
+                if(this.response.takenoko > this.response.takenoko_prescribed){
+                  takenoko.classList.add("table-danger"); //"table-danger" はbootstrapの背景色を指定するクラス
+                }
+                if(this.response.kinoko > this.response.kinoko_prescribed){
+                  kinoko.classList.add("table-danger");
+                }
+                if(this.response.spectator > this.response.spectator_prescribed){
+                  spectator.classList.add("table-danger");
+                }
+            } else {
+                console.log(this.response);
+            }
+        }
+    }
+    xmlHttpRequestJson.open('GET', 'https://script.google.com/macros/s/AKfycbwNJ-8U1-rljLvTEPWuqFj_elcKkRsBELYFict_ng/exec', true);
+    xmlHttpRequestJson.responseType = 'json'; // jsonとして受け取る
+    xmlHttpRequestJson.send(null);
+
+    // 文字列で受け取る場合（申込者数）
+    var xmlHttpRequestJson = new XMLHttpRequest();
+    xmlHttpRequestJson.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            if (this.response) {
+                let respondents = document.getElementById("respondents");
+                respondents.innerHTML = this.response; // 読み込んだ人数を表示する
+            } else {
+                console.log(this.response);
+            }
+        }
+    }
+
+    xmlHttpRequestJson.open('GET', 'https://script.google.com/macros/s/AKfycbwNJ-8U1-rljLvTEPWuqFj_elcKkRsBELYFict_ng/exec?q=respondents', true);
+    xmlHttpRequestJson.responseType = 'text'; // テキストで受け取る(DOMString)
+    xmlHttpRequestJson.send(null);
+
+  </script>
+</html>
