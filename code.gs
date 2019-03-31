@@ -4,8 +4,8 @@
 
 // GETリクエストに対する処理
 function doGet(e) {
-  var ss = SpreadsheetApp.getActive();          // スプレッドシートオブエクトを取得
-  var sheet = ss.getSheetByName("aggregation"); // シートを指定
+  var ss = SpreadsheetApp.getActive();      // スプレッドシートオブエクトを取得
+  var sheet = ss.getSheetByName("summary"); // シートを指定
 
   // パラメータに応じた処理をする
   if(e.parameter.q == "respondents"){                         // 回答者の数をリクエストされた場合

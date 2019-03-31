@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!DOCTYPE html>
 <html lang="ja" dir="ltr">
   <head>
     <meta charset="utf-8">
@@ -106,8 +105,8 @@
     xmlHttpRequestJson.send(null);
 
     // 文字列で受け取る場合（申込者数）
-    var xmlHttpRequestJson = new XMLHttpRequest();
-    xmlHttpRequestJson.onreadystatechange = function() {
+    var xmlHttpRequestText = new XMLHttpRequest();
+    xmlHttpRequestText.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             if (this.response) {
                 let respondents = document.getElementById("respondents");
@@ -118,9 +117,9 @@
         }
     }
 
-    xmlHttpRequestJson.open('GET', 'https://script.google.com/macros/s/AKfycbwNJ-8U1-rljLvTEPWuqFj_elcKkRsBELYFict_ng/exec?q=respondents', true);
-    xmlHttpRequestJson.responseType = 'text'; // テキストで受け取る(DOMString)
-    xmlHttpRequestJson.send(null);
+    xmlHttpRequestText.open('GET', 'https://script.google.com/macros/s/AKfycbwNJ-8U1-rljLvTEPWuqFj_elcKkRsBELYFict_ng/exec?q=respondents', true);
+    xmlHttpRequestText.responseType = 'text'; // テキストで受け取る(DOMString)
+    xmlHttpRequestText.send(null);
 
   </script>
 </html>
