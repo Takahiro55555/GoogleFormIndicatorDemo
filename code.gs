@@ -9,7 +9,7 @@ function doGet(e) {
 
   // パラメータに応じた処理をする
   if(e.parameter.q == "respondents"){                         // 回答者の数をリクエストされた場合
-     var result = sheet.getRange("B2").getValue();              // データを取得するセルを指定(回答者の数)
+     var result = sheet.getRange("A2").getValue();              // データを取得するセルを指定(回答者の数)
   }else{                                                      // 特に指定がなかった場合
     var respondents = sheet.getRange("A2").getValue();          // データを取得するセルを指定(回答者数)
     var takenoko    = sheet.getRange("B2").getValue();          // (タケノコ派の数)
